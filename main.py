@@ -1,16 +1,4 @@
-# %%
-import tensorflow as tf
-
-# GPU 장치 목록 출력
-gpus = tf.config.list_physical_devices('GPU')
-print("Num GPUs Available: ", len(gpus))
-# %%
-!nvcc --version
-# %%
-!nvidia-smi
-# %%
-# !git clone https://github.com/kairess/Mask_RCNN
-# %%
+#%%
 import os
 import sys
 import json
@@ -140,29 +128,3 @@ for image_path in tqdm(image_paths):
 
 out.release()
 
-# %%
-import numpy as np
-
-# TFLite 인터프리터 생성
-interpreter = tf.lite.Interpreter(model_path='model.tflite')
-
-# 인터프리터 초기화
-interpreter.allocate_tensors()
-
-# 입력/출력 텐서 정보 가져오기
-input_details = interpreter.get_input_details()
-output_details = interpreter.get_output_details()
-
-# 입력 데이터 준비 (예: 이미지 전처리)
-input_data = np.array(your_input_data, dtype=np.float32)  # 데이터 유형 맞추기
-input_data = np.expand_dims(input_data, axis=0)  # 배치 차원 추가
-
-# 입력 텐서에 데이터 설정
-interpreter.set_tensor(input_details[0]['index'], input_data)
-
-# 모델 실행
-interpreter.invoke()
-
-# 결과 가져오기
-output_data = interpreter.get_tensor(output_details[0]['index'])
-print(output_data)
