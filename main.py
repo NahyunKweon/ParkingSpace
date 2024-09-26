@@ -6,7 +6,7 @@ import numpy as np
 import time
 from PIL import Image, ImageDraw
 
-ROOT_DIR = 'Mask_RCNN'
+ROOT_DIR = 'Mask-RCNN_TF2.14.0-main'
 
 sys.path.append(ROOT_DIR)
 from mrcnn.config import Config
@@ -21,6 +21,7 @@ class_names = ["BG", "Parking Space", "Drivable Space"]
 #                "Other Road Barriers", "No Parking Stand", "Adjustable Parking Pole", "Waste Tire", "Planter Barrier", "Water Container", "Movable Obstacle",
 #                "Barrier Gate", "Electric Car Charger", "Parking Meter", "Parking Sign", "Traffic Light", "Pedestrian Light", "Street Sign", "Disabled Parking Space",
 #                "Pregnant Parking Space", "Electric Car Parking Space", "Two-wheeled Vehicle Parking Space", "Other Parking Space"]
+#%%
 
 class InferenceConfig(Config):
     NAME = "bbox"
@@ -54,7 +55,7 @@ mask_colors = [
 # 현재 작업 경로 얻기
 current_path = os.getcwd()
 
-test_item = 'parking-space-indoor/대형주차장_004/Camera'
+test_item = 'parking-space-indoor/대형주차장_002/Camera'
 
 real_test_dir = os.path.join(current_path, test_item)
 #print(real_test_dir)
@@ -92,7 +93,7 @@ out = cv2.VideoWriter('output.mp4', fourcc, 10, (1920, 1080))
 
 current_path = os.getcwd()
 
-test_item = 'parking-space-indoor/대형주차장_004/Camera'
+test_item = 'parking-space-indoor/대형주차장_002/Camera'
 
 real_test_dir = os.path.join(current_path, test_item)
 image_paths = []
@@ -128,3 +129,17 @@ for image_path in tqdm(image_paths):
 
 out.release()
 
+
+# %%
+import tensorflow as tf
+from tensorflow.keras.models import model_from_json
+
+# JSON 파일 경로
+json_file_path = 'path/to/your/model.json'
+
+# JSON 파일에서 모델 구조 로드
+with open(json_file_path, 'r') as json_file:
+    model_json = json_file.read()
+
+# 모델 구조를 생성
+model = model_from_json(model_json)
