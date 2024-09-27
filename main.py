@@ -6,12 +6,12 @@ import numpy as np
 import time
 from PIL import Image, ImageDraw
 
-ROOT_DIR = 'Mask-RCNN_TF2.14.0-main'
+ROOT_DIR = 'Mask-RCNN_TF2.14.0'
 
 sys.path.append(ROOT_DIR)
 from mrcnn.config import Config
 import mrcnn.utils as utils
-from mrcnn import visualize
+#from mrcnn import visualize
 import mrcnn.model as modellib
 
 #%%
@@ -46,38 +46,6 @@ test_model.load_weights(model_path, by_name=True)
 # %%
 import skimage
 
-mask_colors = [
-    (0., 0., 0.), # Background
-    (0., 1., 0.), # Parking space
-    (0., 0., 1.)  # Drivable space
-]
-
-# 현재 작업 경로 얻기
-current_path = os.getcwd()
-
-test_item = 'parking-space-indoor/대형주차장_002/Camera'
-
-real_test_dir = os.path.join(current_path, test_item)
-#print(real_test_dir)
-
-image_paths = []
-
-for filename in os.listdir(real_test_dir):
-    if os.path.splitext(filename)[1].lower() in ['.png', '.jpg', '.jpeg']:
-        image_paths.append(os.path.join(real_test_dir, filename))
-
-for image_path in image_paths[:10]:
-    img = skimage.io.imread(image_path)
-    img_arr = np.array(img)
-
-    results = test_model.detect([img_arr], verbose=1)
-    r = results[0]
-
-    colors = tuple(np.take(mask_colors, r['class_ids'], axis=0))
-
-    visualize.display_instances(img, r['rois'], r['masks'], r['class_ids'],
-                                class_names, r['scores'], figsize=(16, 8),
-                                colors=colors)
 # %%
 import cv2
 from tqdm import tqdm
@@ -130,16 +98,3 @@ for image_path in tqdm(image_paths):
 out.release()
 
 
-# %%
-import tensorflow as tf
-from tensorflow.keras.models import model_from_json
-
-# JSON 파일 경로
-json_file_path = 'path/to/your/model.json'
-
-# JSON 파일에서 모델 구조 로드
-with open(json_file_path, 'r') as json_file:
-    model_json = json_file.read()
-
-# 모델 구조를 생성
-model = model_from_json(model_json)
